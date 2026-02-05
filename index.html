@@ -16,15 +16,17 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    position: relative;
   }
 
-  /* متن انیمیشن */
+  /* متن وسط با انیمیشن خط به خط */
   .text-box {
     width: 60%;
     text-align: center;
     font-size: 1.2em;
     color: #111;
     line-height: 1.6em;
+    z-index: 2;
   }
   .text-box span {
     opacity: 0;
@@ -40,16 +42,50 @@
     to { opacity:1; }
   }
 
-  /* قلب و ستاره‌ها */
+  /* متن اسپری بالا */
+  .spray-text {
+    position: absolute;
+    top: 10%;
+    width: 100%;
+    text-align: center;
+    font-size: 3em;
+    color: #FF69B4;
+    letter-spacing: 0.3em;
+    text-shadow: 0 0 2px #fff, 1px 1px 2px #FFB6C1;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+  }
+  .spray-text span {
+    opacity: 0;
+    display: inline-block;
+    animation: sprayFade 0.2s forwards;
+  }
+
+  @keyframes sprayFade {
+    to { opacity: 1; transform: translateY(0px); }
+  }
+
+  /* ستاره‌های دور متن اسپری */
+  .spray-star {
+    position: absolute;
+    font-size: 1.5rem;
+    color: #FFD700;
+    opacity: 0.7;
+    animation: floatUp 6s infinite;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0px) rotate(0deg);}
+    100% { transform: translateY(-30px) rotate(360deg);}
+  }
+
+  /* قلب و ستاره‌ها وسط صفحه */
   .emoji {
     position: absolute;
     font-size: 2rem;
     opacity: 0.5;
     animation: floatUp 8s infinite;
-  }
-  @keyframes floatUp {
-    0% { transform: translateY(100vh) rotate(0deg);}
-    100% { transform: translateY(-50px) rotate(360deg);}
   }
 
   /* موزیک */
@@ -67,8 +103,8 @@
 </head>
 <body>
 
-<!-- متن انیمیشن -->
-<div class="text-box">
+<!-- متن وسط -->
+<div class="text-box" id="mainText">
   <span>My dear Dina ♥️</span>
   <span>Spending a month by your side has filled my life with warmth, positive energy, understanding, and a renewed passion for living.</span>
   <span>Thank you for being you one of the most beautiful things in my life ✨😍</span>
@@ -85,13 +121,39 @@
 <div class="emoji" style="left:90%; top:80%;">💖</div>
 <div class="emoji" style="left:45%; top:85%;">⭐</div>
 
+<!-- متن اسپری بالا -->
+<div class="spray-text" id="sprayText"></div>
+
+<!-- ستاره‌های پراکنده دور متن اسپری -->
+<div class="spray-star" style="left:30%; top:12%;">✨</div>
+<div class="spray-star" style="left:40%; top:15%;">✨</div>
+<div class="spray-star" style="left:60%; top:10%;">✨</div>
+<div class="spray-star" style="left:70%; top:18%;">✨</div>
+<div class="spray-star" style="left:50%; top:8%;">✨</div>
+
 <!-- موزیک -->
 <div class="music-box">
   <audio controls>
     <source src="bg_audio_01.mp3" type="audio/mpeg">
-    مرورگر شما از پخش صوت پشتیبانی نمی‌کند
   </audio>
 </div>
+
+<script>
+  // متن اسپری با سه نقطه آخر
+  const spray = "a month has passed...";
+  const sprayContainer = document.getElementById("sprayText");
+
+  // بعد از 8 ثانیه متن وسط تمام شد، اسپری بیاد
+  setTimeout(() => {
+    spray.split("").forEach((char, i) => {
+      const span = document.createElement("span");
+      span.textContent = char;
+      span.style.animationDelay = `${i*0.1}s`;
+      sprayContainer.appendChild(span);
+    });
+    sprayContainer.style.opacity = 1;
+  }, 8000); // 8 ثانیه مطابق زمان متن وسط
+</script>
 
 </body>
 </html>
